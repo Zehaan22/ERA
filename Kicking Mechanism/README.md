@@ -8,7 +8,7 @@
 
 ##### Variables :
 
-- Mass - (default : 250g)
+- Mass - (default : 410g)
 - Force
 - Angle
 
