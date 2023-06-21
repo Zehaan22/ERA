@@ -31,7 +31,12 @@ rect = pygame.Rect((600, 15), (200, 60))
 ANGLE_input = pg.elements.UITextEntryLine(
     relative_rect=rect,
     manager=UImanager,
+)
 
+rect = pygame.Rect((320, 15), (200, 60))
+FORCE_input = pg.elements.UITextEntryLine(
+    relative_rect=rect,
+    manager=UImanager,
 )
 
 
@@ -84,7 +89,7 @@ class Ball(pygame.Surface):
 
 
 # Test Ball
-ball = Ball(30, 0.25)
+ball = Ball(30, 0.41)
 
 
 def redraw_window():
@@ -117,6 +122,11 @@ def run_window():
                     if event.ui_element == GO_button:
                         text = ANGLE_input.get_text()
                         angle = int(text)
+
+                        text = FORCE_input.get_text()
+                        force = int(text)
+
+                        ball.HIT_VEL = force*ball.SCALER*ball.time_delta/ball.m
                         ball.set_angle(angle)
                         ball.hit_ball()
 
