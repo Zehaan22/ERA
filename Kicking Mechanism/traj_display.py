@@ -39,6 +39,12 @@ FORCE_input = pg.elements.UITextEntryLine(
     manager=UImanager,
 )
 
+rect = pygame.Rect((600, 90), (200, 60))
+RESET_button = pg.elements.UIButton(
+    relative_rect=rect,
+    text='Reset',
+    manager=UImanager)
+
 
 class Ball(pygame.Surface):
     """Class to hold the ball object."""
@@ -129,6 +135,14 @@ def run_window():
                         ball.HIT_VEL = force*ball.SCALER*ball.time_delta/ball.m
                         ball.set_angle(angle)
                         ball.hit_ball()
+
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pg.UI_BUTTON_PRESSED:
+                    if event.ui_element == RESET_button:
+                        ball.x = 100
+                        ball.y = 500
+                        ball.vel_x = 0
+                        ball.vel_y = 0
 
         # Drawing the stuff on the screen
         redraw_window()
