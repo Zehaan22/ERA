@@ -45,6 +45,13 @@ RESET_button = pg.elements.UIButton(
     text='Reset',
     manager=UImanager)
 
+rect = pygame.Rect((600, 600), (200, 60))
+POSITION_text_box = pg.elements.UITextBox(
+    html_text="Position",
+    relative_rect=rect,
+    manager=UImanager
+)
+
 
 class Ball(pygame.Surface):
     """Class to hold the ball object."""
@@ -78,7 +85,6 @@ class Ball(pygame.Surface):
         """Initiate the hit."""
         self.vel_x = self.HIT_VEL * math.cos(math.pi*self.angle/180)
         self.vel_y = -1 * self.HIT_VEL * math.sin(math.pi*self.angle/180)
-        print(self.vel_x, self.vel_y)
 
     def update_pos(self):
         """Update the pos wrt time-delta."""
@@ -87,7 +93,6 @@ class Ball(pygame.Surface):
 
         if self.vel_y != 0:
             self.vel_y += self.GRAV*self.time_delta
-            print(self.vel_y)
 
         if self.y > 500:
             self.vel_x = 0
@@ -114,6 +119,10 @@ def run_window():
 
         # update the ball position
         ball.update_pos()
+        real_x = int((ball.x - 100))
+        real_y = int((ball.y - 500))
+        pos_text = f'{real_x}m , {real_y}m'
+        POSITION_text_box.set_text(pos_text)
 
         # Handling the events
         for event in pygame.event.get():
@@ -135,6 +144,7 @@ def run_window():
                         ball.HIT_VEL = force*ball.SCALER*ball.time_delta/ball.m
                         ball.set_angle(angle)
                         ball.hit_ball()
+                        print(ball.HIT_VEL/ball.SCALER)
 
             if event.type == pygame.USEREVENT:
                 if event.user_type == pg.UI_BUTTON_PRESSED:
