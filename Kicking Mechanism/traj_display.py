@@ -52,6 +52,20 @@ POSITION_text_box = pg.elements.UITextBox(
     manager=UImanager
 )
 
+rect = pygame.Rect((110, 15), (200, 60))
+FORCE_text_box = pg.elements.UITextBox(
+    html_text="Force",
+    relative_rect=rect,
+    manager=UImanager
+)
+
+rect = pygame.Rect((810, 15), (200, 60))
+ANGLE_text_box = pg.elements.UITextBox(
+    html_text="Angle",
+    relative_rect=rect,
+    manager=UImanager
+)
+
 
 class Ball(pygame.Surface):
     """Class to hold the ball object."""
