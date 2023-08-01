@@ -69,12 +69,13 @@ ANGLE_text_box = pg.elements.UITextBox(
 
 class Ball(pygame.Surface):
     """Class to hold the ball object."""
-    SCALER = 0.2
-    GRAV = 9.8*(SCALER**2)
-    time_delta = 1
-    HIT_VEL = 50 * SCALER
+    SCALER = 50
+    GRAV = 9.8
+    time_delta = 0.2
+    HIT_VEL = 0
+    DRAG_COEFF = 0.1
 
-    def __init__(self, radius, mass, x=100, y=500):
+    def __init__(self, radius, mass, x=0, y=0):
         """Initialise the ball object with """
         self.r = radius
         self.m = mass
@@ -88,7 +89,7 @@ class Ball(pygame.Surface):
         """Display the ball on the screen."""
         pygame.draw.circle(WIN,
                            pygame.color.Color(0, 0, 0),
-                           (self.x, self.y),
+                           (self.x*self.SCALER + 100, self.y*self.SCALER + 500),
                            self.r)
 
     def set_angle(self, angle):
@@ -107,8 +108,9 @@ class Ball(pygame.Surface):
 
         if self.vel_y != 0:
             self.vel_y += self.GRAV*self.time_delta
+            self.vel_x -= self.vel_x*self.DRAG_COEFF*self.time_delta
 
-        if self.y > 500:
+        if self.y > 0:
             self.vel_x = 0
             self.vel_y = 0
 
@@ -125,7 +127,7 @@ def redraw_window():
 
 def run_window():
     run = True
-    FPS = 60
+    FPS = 24
 
     while run:
 
@@ -133,8 +135,8 @@ def run_window():
 
         # update the ball position
         ball.update_pos()
-        real_x = int((ball.x - 100))
-        real_y = int((ball.y - 500))
+        real_x = int((ball.x ))
+        real_y = int((ball.y ))
         pos_text = f'{real_x}m , {real_y}m'
         POSITION_text_box.set_text(pos_text)
 
@@ -155,16 +157,16 @@ def run_window():
                         text = FORCE_input.get_text()
                         force = int(text)
 
-                        ball.HIT_VEL = force*ball.SCALER*ball.time_delta/ball.m
+                        ball.HIT_VEL = force*ball.time_delta/ball.m
                         ball.set_angle(angle)
                         ball.hit_ball()
-                        print(ball.HIT_VEL/ball.SCALER)
+                        
 
             if event.type == pygame.USEREVENT:
                 if event.user_type == pg.UI_BUTTON_PRESSED:
                     if event.ui_element == RESET_button:
-                        ball.x = 100
-                        ball.y = 500
+                        ball.x = 0
+                        ball.y = 0
                         ball.vel_x = 0
                         ball.vel_y = 0
 
