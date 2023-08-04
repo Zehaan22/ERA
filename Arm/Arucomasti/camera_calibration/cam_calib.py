@@ -29,7 +29,7 @@ def detect_checker_board(image, grayImage, criteria, boardDimension):
     return image, ret
 
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 
 while True:
     _, frame = cap.read()
@@ -57,7 +57,7 @@ while True:
 
     if key == ord("q"):
         break
-    if key == ord("s") and board_detected == True:
+    if key == ord("s"):
         # storing the checker board image
         cv.imwrite(f"{image_dir_path}/image{n}.png", copyFrame)
 
