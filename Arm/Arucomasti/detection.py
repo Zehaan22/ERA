@@ -2,14 +2,21 @@ import cv2 as cv
 from cv2 import aruco
 import numpy as np
 
-list1 = []  # upper
-list2 = []  # left
+list1 = [4, 5]  # upper
+list2 = [1, 2, 3, 6, 7, 8, 9, 0]  # left
 list3 = []  # right
 list4 = []  # lower
 id_to_cordinate = {
     1: [1, 2],
-    2: [3, 4]
-
+    2: [3, 4],
+    4: [80, 0],
+    5: [160, 0],
+    3: [1, 2],
+    6: [1, 2],
+    7: [1, 2],
+    8: [1, 2],
+    9: [1, 2],
+    0: [1, 2],
 }
 
 
@@ -46,7 +53,7 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
-MARKER_SIZE = 8  # centimeters
+MARKER_SIZE = 9.5  # centimeters
 
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 params = aruco.DetectorParameters()
@@ -94,14 +101,13 @@ while True:
             si_right = abs(top_right[1] - bottom_right[1])
             si_left = abs(top_left[1] - bottom_left[1])
 
-            theta_z = np.arccos(sa/si_right)
-
             if si_right < si_left:
-                theta_z *= -1
+                theta_z = -1 * np.arccos(sa/si_left)
             else:
-                theta_z *= 1
+                theta_z = 1 * np.arccos(sa/si_right)
 
-            location = locate_bot(ids, distance, theta_z)
+            location = locate_bot(ids[0], distance, theta_z)
+            # print(location)
 
             # Draw the pose of the marker
             point = cv.drawFrameAxes(
