@@ -92,12 +92,12 @@ while True:
             # Since there was mistake in calculating the distance approach point-outed in the Video Tutorial's comment
             # so I have rectified that mistake, I have test that out it increase the accuracy overall.
             # Calculating the distance
-            distance = np.sqrt(
+            distance = 1.32*np.sqrt(
                 tVec[i][0][2] ** 2 + tVec[i][0][0] ** 2 + tVec[i][0][1] ** 2
             )
 
-            sa = abs(top_right[0] - top_left[0]) + \
-                abs(bottom_left[0] - bottom_right[0])
+            sa = (abs(top_right[0] - top_left[0]) +
+                  abs(bottom_left[0] - bottom_right[0]))/2
             si_right = abs(top_right[1] - bottom_right[1])
             si_left = abs(top_left[1] - bottom_left[1])
 
@@ -106,8 +106,7 @@ while True:
             else:
                 theta_z = 1 * np.arccos(sa/si_right)
 
-            location = locate_bot(ids[0], distance, theta_z)
-            # print(location)
+            print(si_left/sa*distance)
 
             # Draw the pose of the marker
             point = cv.drawFrameAxes(
