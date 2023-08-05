@@ -2,15 +2,15 @@ import cv2 as cv
 from cv2 import aruco
 import numpy as np
 
-list1 = [4, 5]  # upper
-list2 = [1, 2, 3, 6, 7, 8, 9, 0]  # left
-list3 = [4]  # right
-list4 = [4]  # lower
+list1 = []  # upper
+list2 = [4, 5, 1, 2, 3, 6, 7, 8, 9, 0]  # left
+list3 = []  # right
+list4 = []  # lower
 id_to_cordinate = {
     1: [1, 2],
     2: [3, 4],
     4: [0, 80],
-    5: [160, 0],
+    5: [0, 160],
     3: [1, 2],
     6: [1, 2],
     7: [1, 2],
@@ -30,7 +30,7 @@ def locate_bot(ids, distance, theta):
 
     if ids in list2:
         xf = distance*np.cos(theta)
-        yf = y1-distance*np.sin(theta)
+        yf = y1+distance*np.sin(theta)
 
     if ids in list3:
         xf = x1-distance*np.cos(theta)
@@ -108,7 +108,8 @@ while True:
 
             location = locate_bot(ids[0], distance, -theta_z)
             print(location)
-            # print(si_left/sa*distance)
+            # print(theta_z)
+            print(si_left/sa*distance)
 
             # Draw the pose of the marker
             point = cv.drawFrameAxes(
