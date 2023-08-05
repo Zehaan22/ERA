@@ -1,7 +1,7 @@
 import cv2 as cv
 import os
 
-CHESS_BOARD_DIM = (9, 6)
+CHESS_BOARD_DIM = (8, 5)
 
 n = 0  # image_counter
 
@@ -29,7 +29,7 @@ def detect_checker_board(image, grayImage, criteria, boardDimension):
     return image, ret
 
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 
 while True:
     _, frame = cap.read()
