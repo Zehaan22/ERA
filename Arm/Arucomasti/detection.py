@@ -4,12 +4,12 @@ import numpy as np
 
 list1 = [4, 5]  # upper
 list2 = [1, 2, 3, 6, 7, 8, 9, 0]  # left
-list3 = []  # right
-list4 = []  # lower
+list3 = [4]  # right
+list4 = [4]  # lower
 id_to_cordinate = {
     1: [1, 2],
     2: [3, 4],
-    4: [80, 0],
+    4: [0, 80],
     5: [160, 0],
     3: [1, 2],
     6: [1, 2],
@@ -21,7 +21,7 @@ id_to_cordinate = {
 
 
 def locate_bot(ids, distance, theta):
-    a = id_to_cordinate[ids]
+    a = id_to_cordinate[0]
     x1 = a[0]
     y1 = a[1]
     if ids in list1:
@@ -106,7 +106,9 @@ while True:
             else:
                 theta_z = 1 * np.arccos(sa/si_right)
 
-            print(si_left/sa*distance)
+            location = locate_bot(ids[0], distance, -theta_z)
+            print(location)
+            # print(si_left/sa*distance)
 
             # Draw the pose of the marker
             point = cv.drawFrameAxes(
