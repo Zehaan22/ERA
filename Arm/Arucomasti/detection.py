@@ -64,7 +64,7 @@ marker_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 params = aruco.DetectorParameters()
 detector = aruco.ArucoDetector(marker_dict, params)
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 
 
 def checkFrame():
