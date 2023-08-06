@@ -25,7 +25,10 @@ def dist_vect(v1, v2):
 
 
 def locate_bot(id_, distance, theta):
-    a = id_to_cordinate[id_]
+    try:
+        a = id_to_cordinate[id_]
+    except KeyError:
+        return 0, 0
     x1 = a[0]
     y1 = a[1]
     xf, yf = 0, 0
@@ -58,7 +61,7 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
-MARKER_SIZE = 19.5  # centimeters
+MARKER_SIZE = 9.3  # centimeters
 
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 params = aruco.DetectorParameters()
