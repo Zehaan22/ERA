@@ -9,8 +9,8 @@ list4 = []  # left
 id_to_cordinate = {
     1: [1, 2],
     2: [3, 4],
-    4: [0, 80],
-    5: [0, 160],
+    4: [80, 0],
+    5: [160, 0],
     3: [1, 2],
     6: [1, 2],
     7: [1, 2],
@@ -111,9 +111,7 @@ def checkFrame():
             theta_y = 180/np.pi*(np.arctan(2*rVec[i][0][1]/v[1]))
             theta_z = 90 - 180/np.pi*(np.arctan(2*rVec[i][0][2]/v[2]))
 
-            location = locate_bot(ids[0], distance, -theta_z)
-
-            print(location, distance, theta_z)
+            location = locate_bot(ids[0], distance, (np.pi/180)*theta_z)
 
             # Draw the pose of the marker
             point = cv.drawFrameAxes(
@@ -144,6 +142,8 @@ def checkFrame():
     if key == ord('q'):
         print("q received")
         return "Done"
+    if key == ord('d'):
+        print(location, distance, theta_z)
 
 
 while True:
