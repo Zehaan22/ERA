@@ -37,7 +37,7 @@ obj_points_3D = []  # 3d point in real world space
 img_points_2D = []  # 2d points in image plane.
 
 # The images directory path
-image_dir_path = "images"
+image_dir_path = "/home/legendarygene/ERA/Arm/Arucomasti/camera_calibration/images"
 
 files = os.listdir(image_dir_path)
 for file in files:
