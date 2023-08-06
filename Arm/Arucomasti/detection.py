@@ -2,10 +2,10 @@ import cv2 as cv
 from cv2 import aruco
 import numpy as np
 
-list1 = []  # upper
-list2 = [4, 5, 1, 2, 3, 6, 7, 8, 9, 0]  # left
-list3 = []  # right
-list4 = []  # lower
+list1 = [4, 5]  # upper
+list2 = []  # right
+list3 = []  # bottom
+list4 = []  # left
 id_to_cordinate = {
     1: [1, 2],
     2: [3, 4],
@@ -20,25 +20,30 @@ id_to_cordinate = {
 }
 
 
-def locate_bot(ids, distance, theta):
-    a = id_to_cordinate[0]
+def dist_vect(v1, v2):
+    return np.sqrt((v1[0]-v2[0])**2 + (v1[1]-v2[1])**2)
+
+
+def locate_bot(id_, distance, theta):
+    a = id_to_cordinate[id_]
     x1 = a[0]
     y1 = a[1]
-    if ids in list1:
+    xf, yf = 0, 0
+    if id_ in list1:
+        xf = x1+distance*np.sin(theta)
+        yf = y1+distance*np.cos(theta)  # here y1 is 0 identiacally
+
+    if id_ in list2:
+        xf = x1 - distance*np.cos(theta)
+        yf = y1 - distance*np.sin(theta)
+
+    if id_ in list3:
         xf = x1-distance*np.sin(theta)
         yf = y1-distance*np.cos(theta)
 
-    if ids in list2:
-        xf = distance*np.cos(theta)
-        yf = y1+distance*np.sin(theta)
-
-    if ids in list3:
-        xf = x1-distance*np.cos(theta)
-        yf = y1-distance*np.sin(theta)
-
-    if ids in list4:
-        xf = x1-distance*np.sin(theta)
-        yf = distance*np.cos(theta)
+    if id_ in list4:
+        xf = x1+distance*np.cos(theta)  # here x1 = 0 identically
+        yf = y1 - distance*np.sin(theta)
 
     return xf, yf
 
@@ -61,11 +66,13 @@ detector = aruco.ArucoDetector(marker_dict, params)
 
 cap = cv.VideoCapture(0)
 
-while True:
+
+def checkFrame():
     ret, frame = cap.read()
 
     if not ret:
-        break
+        print("ret issue")
+        return "Done"
 
     # Processing the image
     gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -95,21 +102,18 @@ while True:
             distance = 1.32*np.sqrt(
                 tVec[i][0][2] ** 2 + tVec[i][0][0] ** 2 + tVec[i][0][1] ** 2
             )
-
-            sa = (abs(top_right[0] - top_left[0]) +
-                  abs(bottom_left[0] - bottom_right[0]))/2
-            si_right = abs(top_right[1] - bottom_right[1])
-            si_left = abs(top_left[1] - bottom_left[1])
-
-            if si_right < si_left:
-                theta_z = -1 * np.arccos(sa/si_left)
-            else:
-                theta_z = 1 * np.arccos(sa/si_right)
+            theta_rod = np.sqrt(
+                rVec[i][0][2] ** 2 + rVec[i][0][0] ** 2 + rVec[i][0][1] ** 2
+            )
+            v = [rVec[i][0][0]/theta_rod, rVec[i][0]
+                 [1]/theta_rod, rVec[i][0][2]/theta_rod]
+            theta_x = 180/np.pi*(np.arctan(2*rVec[i][0][0]/v[0]))
+            theta_y = 180/np.pi*(np.arctan(2*rVec[i][0][1]/v[1]))
+            theta_z = 90 - 180/np.pi*(np.arctan(2*rVec[i][0][2]/v[2]))
 
             location = locate_bot(ids[0], distance, -theta_z)
-            print(location)
-            # print(theta_z)
-            print(si_left/sa*distance)
+
+            print(location, distance, theta_z)
 
             # Draw the pose of the marker
             point = cv.drawFrameAxes(
@@ -138,7 +142,14 @@ while True:
     cv.imshow("frame", frame)
     key = cv.waitKey(1)
     if key == ord('q'):
+        print("q received")
+        return "Done"
+
+
+while True:
+    if checkFrame() == "Done":
         break
+
 
 cap.release()
 cv.destroyAllWindows()
