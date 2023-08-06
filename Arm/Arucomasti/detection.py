@@ -58,13 +58,13 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
-MARKER_SIZE = 9.5  # centimeters
+MARKER_SIZE = 19.5  # centimeters
 
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 params = aruco.DetectorParameters()
 detector = aruco.ArucoDetector(marker_dict, params)
 
-cap = cv.VideoCapture(1)
+cap = cv.VideoCapture(0)
 
 
 def checkFrame():
