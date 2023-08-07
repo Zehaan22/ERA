@@ -25,7 +25,10 @@ def dist_vect(v1, v2):
 
 
 def locate_bot(id_, distance, theta):
-    a = id_to_cordinate[id_]
+    try:
+    	a = id_to_cordinate[id_]
+    except KeyError: 
+        return (0, 0)
     x1 = a[0]
     y1 = a[1]
     xf, yf = 0, 0
@@ -48,7 +51,7 @@ def locate_bot(id_, distance, theta):
     return xf, yf
 
 
-calib_data_path = "../calib_data/MultiMatrix.npz"
+calib_data_path = "./calib_data/MultiMatrix_new.npz"
 
 calib_data = np.load(calib_data_path)
 print(calib_data.files)
@@ -58,13 +61,13 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
-MARKER_SIZE = 19.5  # centimeters
+MARKER_SIZE = 9.5  # centimeters
 
 marker_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 params = aruco.DetectorParameters()
 detector = aruco.ArucoDetector(marker_dict, params)
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(2)
 
 
 def checkFrame():
@@ -99,7 +102,7 @@ def checkFrame():
             # Since there was mistake in calculating the distance approach point-outed in the Video Tutorial's comment
             # so I have rectified that mistake, I have test that out it increase the accuracy overall.
             # Calculating the distance
-            distance = 1.32*np.sqrt(
+            distance = np.sqrt(
                 tVec[i][0][2] ** 2 + tVec[i][0][0] ** 2 + tVec[i][0][1] ** 2
             )
             theta_rod = np.sqrt(
